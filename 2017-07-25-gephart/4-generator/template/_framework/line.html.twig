@@ -1,0 +1,53 @@
+<div class="_gf-line">
+    <img class="_gf-line__logo"
+         src="data:image/png;base64,{{ base64_encode(file_get_contents(_template_dir ~ "_framework/assets/img/logo.png")) }}">
+
+    {% for extension in extensions if extension.align == "left" %}
+        {% set content = extension.content %}
+        {% include "_framework/line_extension.html.twig" %}
+    {% endfor %}
+
+    <div style="float:right">
+        {% for extension in extensions if extension.align == "right" %}
+            {% set content = extension.content %}
+            {% include "_framework/line_extension.html.twig" %}
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    var _gf_hovering  = document.getElementsByClassName("_gf-line__box--hover");
+    console.log(_gf_hovering.length);
+    for (var i= 0; i < _gf_hovering.length; i++) {
+        _gf_hovering[i].addEventListener("mouseenter", function(){
+            var children = this.children;
+            var line_height = document.getElementsByClassName("_gf-line")[0].clientHeight;
+            for (var j=0;j<children.length;j++) {
+                if (children[j].className == "_gf-line__box__hover") {
+
+                    children[j].style.left = "auto";
+                    children[j].style.right = -1+"px";
+                    children[j].style.maxWidth = "10000px";
+                    children[j].style.height = "auto";
+
+                    var left = children[j].offsetLeft + this.offsetLeft;
+                    var top = children[j].offsetTop + window.innerHeight;
+
+                    if (left < 0) {
+                        children[j].style.right = "auto";
+                        children[j].style.left = -this.offsetLeft-1+"px";
+                        children[j].style.maxWidth = window.innerWidth+"px";
+                    }
+
+                    if (top < 0) {
+                        children[j].style.height = window.innerHeight - line_height + "px";
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<style>
+    {% include "_framework/assets/css/main.css" %}
+</style>

@@ -1,0 +1,89 @@
+{{ "{%" }} extends "admin/default.html.twig" {{ "%}" }}
+
+{{ "{%" }} block content {{ "%}" }}
+
+    <h1>{{ module.name }}</h1>
+
+    <p>
+        <button class="btn btn-success" onclick="document.getElementById('form-add').style.display='block';this.style.display='none'">Přidat</button>
+    </p>
+
+    <div id="form-add" style="display: none">
+        <form action="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}") {{ "}}" }}" method="post" enctype="multipart/form-data">
+{% for item in items %}
+{% if item.type == "text" %}
+            <div class="form-group">
+                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
+                <input type="text" name="{{ item.slug }}" class="form-control" id="form_new_{{ item.slug }}">
+            </div>
+{% elseif item.type == "textarea" %}
+            <div class="form-group">
+                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
+                <textarea class="form-control" name="{{ item.slug }}" rows="10" id="form_new_{{ item.slug }}"></textarea>
+            </div>
+{% elseif item.type == "bool" %}
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="{{ item.slug }}" value="1">
+                    {{ item.name }}
+                </label>
+            </div>
+{% elseif item.type == "date" %}
+            <div class="form-group">
+                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
+                <input type="date" name="{{ item.slug }}" class="form-control" id="form_new_{{ item.slug }}">
+            </div>
+{% elseif item.type == "file" or item.type == "image" %}
+            <div class="form-group">
+                <label for="form_new_{{ item.slug }}">{{ item.name }}</label>
+                <input type="file" name="{{ item.slug }}" class="form-control" id="form_new_{{ item.slug }}">
+            </div>
+{% elseif item.isRelation %}
+            <div class="form-group">
+                <label for="form_edit_{{ item.slug }}">{{ item.name }}</label>
+                <select name="{{ item.slug }}" class="form-control" id="form_edit_{{ item.slug }}">
+                    <option value="0">--- Vyberte ---</option>
+                    {{ "{%" }} for {{ item.slug }} in {{ item.slugPlural }} {{ "%}" }}
+                        <option value="{{ "{{" }} {{ item.slug }}.id {{ "}}" }}">
+                        {{ "{%" }} if {{ item.slug }}.title {{ "%}" }}
+                            {{ "{{" }} {{ item.slug }}.title {{ "}}" }}
+                        {{ "{%" }} elseif {{ item.slug }}.name {{ "%}" }}
+                            {{ "{{" }} {{ item.slug }}.name {{ "}}" }}
+                        {{ "{%" }} else {{ "%}" }}
+                            #{{ "{{" }} {{ item.slug }}.id {{ "}}" }}
+                        {{ "{%" }} endif {{ "%}" }}
+                    </option>
+                    {{ "{%" }} endfor {{ "%}" }}
+                </select>
+            </div>
+{% endif %}
+{% endfor %}
+            <button type="submit" class="btn btn-default">Přidat</button>
+        </form>
+        <br/>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            {{ "{%" }} for {{ module.slugSingular }} in {{ module.slugPlural }} {{ "%}" }}
+                <tr>
+{% set break = false %}
+{% for item in items if not break %}
+{% if item.type == "text" %}
+{% set break = true %}
+                    <td>
+                        <a href="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}">{{ "{{" }} {{ module.slugSingular }}.{{ item.slug }} {{ "}}" }}</a>
+                    </td>
+{% endif %}
+{% endfor %}
+                    <td width="130">
+                        <a class="btn btn-xs btn-success" href="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_edit", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}">upravit</a>
+                        <a class="btn btn-xs btn-danger" href="{{ "{{" }} _router.generateUrl("admin_{{ module.slugSingular }}_delete", {"id":{{ module.slugSingular }}.id}) {{ "}}" }}"
+                           onclick="return confirm('Opravdu?')">smazat</a>
+                    </td>
+                </tr>
+            {{ "{%" }} endfor {{ "%}" }}
+        </table>
+    </div>
+
+{{ "{%" }} endblock {{ "%}" }}

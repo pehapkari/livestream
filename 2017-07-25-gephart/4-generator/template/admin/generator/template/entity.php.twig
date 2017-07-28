@@ -1,0 +1,175 @@
+<?php
+
+namespace App\Entity;
+
+/**
+ * @ORM\Table {{ module.slugSingular }}
+ * @ORM\Translation
+ */
+class {{ module.entityName }}
+{
+
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     */
+    private $id = 0;
+
+{% for item in items %}
+{% if item.type == "text" %}
+    /**
+     * @var string
+     *
+     * @ORM\Type VARCHAR(255)
+     * @ORM\Column {{ item.slug }}
+     * @ORM\Translatable
+     */
+    private ${{ item.slug }} = "";
+
+{% elseif item.type == "textarea" %}
+    /**
+     * @var string
+     *
+     * @ORM\Type TEXT
+     * @ORM\Column {{ item.slug }}
+     * @ORM\Translatable
+     */
+    private ${{ item.slug }} = "";
+
+{% elseif item.type == "bool" %}
+    /**
+     * @var bool
+     *
+     * @ORM\Type TINYINT(1)
+     * @ORM\Column {{ item.slug }}
+     */
+    private ${{ item.slug }} = 0;
+
+{% elseif item.type == "date" %}
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Type DATE
+     * @ORM\Column {{ item.slug }}
+     */
+    private ${{ item.slug }} = "";
+
+{% elseif item.type == "image" or item.type == "file" %}
+    /**
+     * @var string
+     *
+     * @ORM\Type VARCHAR(255)
+     * @ORM\Column {{ item.slug }}
+     */
+    private ${{ item.slug }} = "";
+
+{% elseif item.isRelation %}
+    /**
+     * @var int
+     *
+     * @ORM\Type INT(6) UNSIGNED
+     * @ORM\Column {{ item.slug }}
+     */
+    private ${{ item.slug }} = 0;
+
+{% endif %}
+{% endfor %}
+
+    public function __construct()
+    {
+{% for item in items %}
+{% if item.type == "date" %}
+        $this->{{ item.slug }} = new \DateTime();
+{% endif %}
+{% endfor %}
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+{% for item in items %}
+{% if item.type == "text" or item.type == "textarea" or item.type == "image" or item.type == "file" %}
+    /**
+     * @return string
+     */
+    public function get{{ item.slugInCamel }}(): string
+    {
+        return $this->{{ item.slug }};
+    }
+
+    /**
+     * @param string ${{ item.slug }}
+     */
+    public function set{{ item.slugInCamel }}(string ${{ item.slug }})
+    {
+        $this->{{ item.slug }} = ${{ item.slug }};
+    }
+
+{% elseif item.type == "bool" %}
+    /**
+     * @return bool
+     */
+    public function is{{ item.slugInCamel }}(): bool
+    {
+        return $this->{{ item.slug }};
+    }
+
+    /**
+     * @param bool ${{ item.slug }}
+     */
+    public function set{{ item.slugInCamel }}(bool ${{ item.slug }})
+    {
+        $this->{{ item.slug }} = ${{ item.slug }};
+    }
+
+{% elseif item.type == "date" %}
+    /**
+     * @return \DateTime
+     */
+    public function get{{ item.slugInCamel }}(): \DateTime
+    {
+        return $this->{{ item.slug }};
+    }
+
+    /**
+     * @param \DateTime ${{ item.slug }}
+     */
+    public function set{{ item.slugInCamel }}(\DateTime ${{ item.slug }})
+    {
+        $this->{{ item.slug }} = ${{ item.slug }};
+    }
+
+{% elseif item.isRelation %}
+    /**
+     * @return int
+     */
+    public function get{{ item.slugInCamel }}(): int
+    {
+        return $this->{{ item.slug }};
+    }
+
+    /**
+     * @param int ${{ item.slug }}
+     */
+    public function set{{ item.slugInCamel }}(int ${{ item.slug }})
+    {
+        $this->{{ item.slug }} = ${{ item.slug }};
+    }
+
+{% endif %}
+{% endfor %}
+}

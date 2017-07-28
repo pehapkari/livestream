@@ -1,0 +1,205 @@
+<?php
+
+namespace Admin\Controller;
+
+use Admin\Response\BackendTemplateResponse;
+use App\Entity\{{ module.entityName }};
+{% for entity in entities %}
+use App\Repository\{{ entity }}Repository;
+{% endfor %}
+use Gephart\ORM\EntityManager;
+use Gephart\Request\Request;
+use Gephart\Routing\Router;
+
+/**
+ * @Security ROLE_ADMIN
+ * @RoutePrefix /admin/{{ module.slugSingular }}
+ */
+class {{ module.entityName }}Controller
+{
+
+    /**
+     * @var Router
+     */
+    private $router;
+
+    /**
+     * @var BackendTemplateResponse
+     */
+    private $template_response;
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var {{ module.entityName }}Repository
+     */
+    private ${{ module.slugSingular }}_repository;
+
+{% for item in items if item.isRelation and item.slug != module.slugSingular %}
+    /**
+     * @var {{ item.type }}Repository
+     */
+    private ${{ item.slug }}_repository;
+
+{% endfor %}
+    /**
+     * @var EntityManager
+     */
+    private $entity_manager;
+
+    public function __construct(
+        Router $router,
+        BackendTemplateResponse $template_response,
+        Request $request,
+        EntityManager $entity_manager,
+{% for item in items if item.isRelation and item.slug != module.slugSingular %}
+        {{ item.type }}Repository ${{ item.slug }}_repository,
+{% endfor %}
+        {{ module.entityName }}Repository ${{ module.slugSingular }}_repository
+    )
+    {
+        $this->router = $router;
+        $this->template_response = $template_response;
+        $this->request = $request;
+{% for item in items if item.isRelation and item.slug != module.slugSingular %}
+        $this->{{ item.slug }}_repository = ${{ item.slug }}_repository;
+{% endfor %}
+        $this->{{ module.slugSingular }}_repository = ${{ module.slugSingular }}_repository;
+        $this->entity_manager = $entity_manager;
+    }
+
+    /**
+     * @Route {
+     *  "rule": "/",
+     *  "name": "admin_{{ module.slugSingular }}"
+     * }
+     */
+    public function index()
+    {
+        if ($this->request->post("{{ items[0].slug }}")) {
+            ${{ module.slugSingular }} = new {{ module.entityName }}();
+            $this->mapEntityFromRequest(${{ module.slugSingular }});
+
+            $this->entity_manager->save(${{ module.slugSingular }});
+
+            $url = $this->router->generateUrl("admin_{{ module.slugSingular }}");
+            header("location: $url");
+            exit;
+        }
+
+{% for item in items if item.isRelation %}
+        ${{ item.slugPlural }} = $this->{{ item.slug }}_repository->findBy([],["ORDER BY" => "id"]);
+{% endfor %}
+        ${{ module.slugPlural }} = $this->{{ module.slugSingular }}_repository->findBy([], [
+            "ORDER BY" => "id DESC"
+        ]);
+
+        return $this->template_response->template("admin/{{ module.slugSingular }}/index.html.twig", [
+{% for item in items if item.isRelation %}
+            "{{ item.slugPlural }}" => ${{ item.slugPlural }},
+{% endfor %}
+            "{{ module.slugPlural }}" => ${{ module.slugPlural }}
+        ]);
+    }
+
+    /**
+     * @Route {
+     *  "rule": "/edit/{id}",
+     *  "name": "admin_{{ module.slugSingular }}_edit"
+     * }
+     */
+    public function edit($id)
+    {
+        if ($this->request->post("{{ items[0].slug }}")) {
+            ${{ module.slugSingular }} = $this->{{ module.slugSingular }}_repository->find($id);
+            $this->mapEntityFromRequest(${{ module.slugSingular }});
+
+            $this->entity_manager->save(${{ module.slugSingular }});
+
+            $url = $this->router->generateUrl("admin_{{ module.slugSingular }}_edit", ["id"=>${{ module.slugSingular }}->getId()]);
+            header("location: $url");
+            exit;
+        }
+
+{% for item in items if item.isRelation %}
+        ${{ item.slugPlural }} = $this->{{ item.slug }}_repository->findBy([],["ORDER BY" => "id"]);
+{% endfor %}
+        ${{ module.slugSingular }} = $this->{{ module.slugSingular }}_repository->find($id);
+
+        return $this->template_response->template("admin/{{ module.slugSingular }}/edit.html.twig", [
+{% for item in items if item.isRelation %}
+            "{{ item.slugPlural }}" => ${{ item.slugPlural }},
+{% endfor %}
+            "{{ module.slugSingular }}" => ${{ module.slugSingular }}
+        ]);
+    }
+
+    /**
+     * @Route {
+     *  "rule": "/delete/{id}",
+     *  "name": "admin_{{ module.slugSingular }}_delete"
+     * }
+     */
+    public function delete($id)
+    {
+        ${{ module.slugSingular }} = $this->{{ module.slugSingular }}_repository->find($id);
+        $this->entity_manager->remove(${{ module.slugSingular }});
+
+        $url = $this->router->generateUrl("admin_{{ module.slugSingular }}");
+        header("location: $url");
+        exit;
+    }
+
+    private function mapEntityFromRequest({{ module.entityName }} ${{ module.slugSingular }}) {
+{% for item in items %}
+{% if item.type == "date" %}
+        ${{ module.slugSingular }}->set{{ item.slugInCamel }}(new \DateTime($this->request->post("{{ item.slug }}")));
+{% elseif item.type == "file" or item.type == "image" %}
+        if (!empty($_FILES["{{ item.slug }}"]) && !empty($_FILES["{{ item.slug }}"]["tmp_name"])) {
+            ${{ module.slugSingular }}->set{{ item.slugInCamel }}($this->uploadFile($_FILES["{{ item.slug }}"]));
+        }
+        if ($this->request->post("{{ item.slug }}_delete")) {
+            ${{ module.slugSingular }}->set{{ item.slugInCamel }}("");
+        }
+{% else %}
+        ${{ module.slugSingular }}->set{{ item.slugInCamel }}($this->request->post("{{ item.slug }}"));
+{% endif %}
+{% endfor %}
+    }
+
+{% set break = false %}
+{% for item in items if not break %}
+{% if item.type == "file" or item.type == "image" %}
+    private function uploadFile(array $file): string
+    {
+        $filename = md5($file["name"].time()) . "." . substr($file["name"], -4);
+        $dir1 = substr($filename, 0, 2);
+        $dir2 = substr($filename, 2, 2);
+        $upload_dir = __DIR__ . "/../../../../web/upload";
+        $target = $upload_dir . "/" . $dir1 . "/" . $dir2 . "/" . $filename;
+
+        if (!is_dir($upload_dir . "/" . $dir1)) {
+            @mkdir($upload_dir . "/" . $dir1);
+            @chmod($upload_dir . "/" . $dir1, 0777);
+        }
+
+        if (!is_dir($upload_dir . "/" . $dir1 . "/" . $dir2)) {
+            @mkdir($upload_dir . "/" . $dir1 . "/" . $dir2);
+            @chmod($upload_dir . "/" . $dir1 . "/" . $dir2, 0777);
+        }
+
+        if (move_uploaded_file($file["tmp_name"], $target)) {
+            @chmod($target, 0777);
+            return $dir1 . "/" . $dir2 . "/" . $filename;
+        }
+
+        return "";
+    }
+
+{% set break = true %}
+{% endif %}
+{% endfor %}
+}

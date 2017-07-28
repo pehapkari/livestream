@@ -1,0 +1,162 @@
+$(function () {
+
+    $("body").on("click", ".js-generator-item-new", function () {
+        var iterator = $(".js-generator-item").length;
+        $.get("{{ _router.generateUrl("admin_generator_ajax_item_new") }}", {
+            "iterator": iterator
+        }, function (html) {
+            $(".js-generator-items").append(html);
+        });
+
+        return false;
+    });
+
+    $("body").on("click", ".js-generator-item-remove", function () {
+        $(this).parents(".js-generator-item").remove();
+    });
+
+    $("body").on("click", ".js-generator-all-show", function () {
+        $("#generator-modal-label").html("Probíhá generování ...");
+        $("#generator-modal-content").html("Načítání ...");
+        if (confirm('Opravdu chcete vše vygenerovat? Přijdete o všechny ruční úpravy.')) {
+            var id = $(this).parents(".js-generator-module").data("generator-module_id");
+            $.get("{{ _router.generateUrl("admin_generator_ajax_entitysync") }}", {
+                "id": id
+            }, function () {
+                $("#generator-modal-content").html("Entita vygenerována.<br/>");
+                $.get("{{ _router.generateUrl("admin_generator_ajax_repositorysync") }}", {
+                    "id": id
+                }, function () {
+                    $("#generator-modal-content").append("Repozitář vygenerován.<br/>");
+                    $.get("{{ _router.generateUrl("admin_generator_ajax_tablesync") }}", {
+                        "id": id
+                    }, function () {
+                        $("#generator-modal-content").append("Tabulka synchronizována.<br/>");
+                        $.get("{{ _router.generateUrl("admin_generator_ajax_controllersync") }}", {
+                            "id": id
+                        }, function () {
+                            $("#generator-modal-content").append("Controller vygenerován.<br/>");
+                            $.get("{{ _router.generateUrl("admin_generator_ajax_viewsync") }}", {"id": id}, function () {
+                                $("#generator-modal-content").append("Šablona vygenerována.<br/>");
+                                $("#generator-modal-label").html("Hotovo");
+                            });
+                        });
+                    });
+                });
+            });
+        }
+    });
+
+    $("body").on("click", ".js-generator-tablesync-show", function () {
+        $("#generator-modal-label").html("Probíhá generování ...");
+        $("#generator-modal-content").html("Načítání ...");
+        var id = $(this).parents(".js-generator-module").data("generator-module_id");
+        if (confirm('Generováním přijdete o veškeré ruční úpravy. Opravdu chcete?')) {
+            $.get("{{ _router.generateUrl("admin_generator_ajax_tablesync") }}", {
+                "id": id
+            }, function (html) {
+                $("#generator-modal-label").html("Tabulka byla synchronizována:");
+                $("#generator-modal-content").html("<pre><code class='sql'>" + html + "</code></pre>");
+                $('#generator-modal-content pre code').each(function (i, block) {
+                    hljs.highlightBlock(block);
+                });
+            });
+        } else {
+            event.stopPropagation();
+            return false;
+        }
+
+    });
+
+    $("body").on("click", ".js-generator-entitysync-show", function () {
+        $("#generator-modal-label").html("Probíhá generování ...");
+        $("#generator-modal-content").html("Načítání ...");
+        var id = $(this).parents(".js-generator-module").data("generator-module_id");
+        if (confirm('Generováním přijdete o veškeré ruční úpravy. Opravdu chcete?')) {
+            $.get("{{ _router.generateUrl("admin_generator_ajax_entitysync") }}", {
+                "id": id
+            }, function (html) {
+                $("#generator-modal-label").html("Entita byla vygenerována:");
+                $("#generator-modal-content").html("<pre><code class='php'>" + html + "</code></pre>");
+                $('#generator-modal-content pre code').each(function (i, block) {
+                    hljs.highlightBlock(block);
+                });
+            });
+        } else {
+            event.stopPropagation();
+            return false;
+        }
+    });
+
+    $("body").on("click", ".js-generator-repositorysync-show", function () {
+        $("#generator-modal-label").html("Probíhá generování ...");
+        $("#generator-modal-content").html("Načítání ...");
+        var id = $(this).parents(".js-generator-module").data("generator-module_id");
+        if (confirm('Generováním přijdete o veškeré ruční úpravy. Opravdu chcete?')) {
+            $.get("{{ _router.generateUrl("admin_generator_ajax_repositorysync") }}", {
+                "id": id
+            }, function (html) {
+                $("#generator-modal-label").html("Repozitáž by vygenerován:");
+                $("#generator-modal-content").html("<pre><code class='php'>" + html + "</code></pre>");
+                $('#generator-modal-content pre code').each(function (i, block) {
+                    hljs.highlightBlock(block);
+                });
+            });
+        } else {
+            event.stopPropagation();
+            return false;
+        }
+    });
+
+    $("body").on("click", ".js-generator-controllersync-show", function () {
+        $("#generator-modal-label").html("Probíhá generování ...");
+        $("#generator-modal-content").html("Načítání ...");
+        var id = $(this).parents(".js-generator-module").data("generator-module_id");
+        if (confirm('Generováním přijdete o veškeré ruční úpravy. Opravdu chcete?')) {
+            $.get("{{ _router.generateUrl("admin_generator_ajax_controllersync") }}", {
+                "id": id
+            }, function (html) {
+                $("#generator-modal-label").html("Controller byl vygenerován:");
+                $("#generator-modal-content").html("<pre><code class='php'>" + html + "</code></pre>");
+                $('#generator-modal-content pre code').each(function (i, block) {
+                    hljs.highlightBlock(block);
+                });
+            });
+        } else {
+            event.stopPropagation();
+            return false;
+        }
+    });
+
+    $("body").on("click", ".js-generator-viewsync-show", function () {
+        $("#generator-modal-label").html("Probíhá generování ...");
+        $("#generator-modal-content").html("Načítání ...");
+        var id = $(this).parents(".js-generator-module").data("generator-module_id");
+        if (confirm('Generováním přijdete o veškeré ruční úpravy. Opravdu chcete?')) {
+            $.get("{{ _router.generateUrl("admin_generator_ajax_viewsync") }}", {"id": id}, function (html) {
+                $("#generator-modal-label").html("Šablona byla vygenerována:");
+                $("#generator-modal-content").html("<pre><code class='php'>" + html + "</code></pre>");
+                $('#generator-modal-content pre code').each(function (i, block) {
+                    hljs.highlightBlock(block);
+                });
+            });
+        } else {
+            event.stopPropagation();
+            return false;
+        }
+    });
+
+
+    $("body").on("drag.end.arrangeable", function(){
+        var sorts = [];
+
+        $('.js-generator-module').each(function(){
+            sorts.push($(this).data("generator-module_id"));
+        });
+
+        $.get("{{ _router.generateUrl("admin_generator_ajax_savesortmodules") }}", {
+            "sorts": sorts
+        });
+    });
+
+});

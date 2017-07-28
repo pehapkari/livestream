@@ -1,0 +1,12 @@
+{
+  "name": "michalkatuscak/4-generator",
+  "authors": [
+    {
+      "name": "Michal Katuščák",
+      "email": "michal@katuscak.cz"
+    }
+  ],
+  "require": {
+    "gephart/framework": "0.3.*"
+  }
+}

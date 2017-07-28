@@ -1,0 +1,12 @@
+{
+  "name": "michalkatuscak/3-framework",
+  "authors": [
+    {
+      "name": "Michal Katuščák",
+      "email": "michal@katuscak.cz"
+    }
+  ],
+  "require": {
+    "gephart/framework": "0.3.*"
+  }
+}
