@@ -1,0 +1,18 @@
+<div class="_gf-line__box
+    {% if content %}_gf-line__box--hover{% endif %}"
+    {% if extension.attrs %}{{ extension.attrs|raw }}{% endif %}
+>
+            <span class="_gf-line__box__title">
+                {% if extension.icon %}
+                    <img class="_gf-line__ico" src="{{ extension.icon|raw }}">
+                {% endif %}
+
+                {{ extension.title|raw }}
+            </span>
+
+    {% if content %}
+        <div class="_gf-line__box__hover">
+            {{ content|raw }}
+        </div>
+    {% endif %}
+</div>

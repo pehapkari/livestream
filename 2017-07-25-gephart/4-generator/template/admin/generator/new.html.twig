@@ -1,0 +1,30 @@
+{% extends "admin/generator/default.html.twig" %}
+
+{% block content %}
+
+<h1>Generátor - Nový modul</h1>
+
+<form action="{{ _route.generateUrl("admin_generator_new") }}" method="post">
+    <table class="table table-bordered">
+        <tr>
+            <th width="50%">Název modulu</th>
+            <th>Slug - Jednotné číslo</th>
+            <th>Slug - Množné číslo</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" class="form-control" name="name" required="required">
+            </td>
+            <td>
+                <input type="text" class="form-control" name="slug_singular" required="required">
+            </td>
+            <td>
+                <input type="text" class="form-control" name="slug_plural" required="required">
+            </td>
+        </tr>
+    </table>
+
+    <button type="submit" class="btn btn-info">Vytvořit</button>
+</form>
+
+{% endblock %}

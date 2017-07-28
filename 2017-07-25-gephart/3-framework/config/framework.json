@@ -1,0 +1,8 @@
+{
+  "template": {
+    "dir": "template/",
+    "twig": {
+      "cache": "cache/twig/"
+    }
+  }
+}

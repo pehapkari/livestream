@@ -1,0 +1,80 @@
+{% extends "admin/generator/default.html.twig" %}
+
+{% block content %}
+
+    <h1>Generátor - Úprava modulu</h1>
+
+    <form action="{{ _route.generateUrl("admin_generator") }}" method="post">
+        <table class="table table-bordered">
+            <tr>
+                <th width="50%">Název modulu</th>
+                <th>Slug - Jednotné číslo</th>
+                <th>Slug - Množné číslo</th>
+            </tr>
+            <tr>
+                <td>
+                    <input value="{{ module.name }}" type="text" class="form-control" name="name" required="required">
+                </td>
+                <td>
+                    <input value="{{ module.slugSingular }}" type="text" class="form-control" name="slug_singular" required="required">
+                </td>
+                <td>
+                    <input value="{{ module.slugPlural }}" type="text" class="form-control" name="slug_plural" required="required">
+                </td>
+            </tr>
+        </table>
+
+
+        <div>
+
+            <ul class="nav nav-tabs" id="tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#items" aria-controls="home" role="tab"
+                                                          data-toggle="tab">Položky</a></li>
+                <li role="presentation"><a href="#anothers" aria-controls="profile" role="tab" data-toggle="tab">Nastavení</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="items">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="row js-generator-items">
+                                {% for item in items %}
+                                    {% include "admin/generator/snippet/item.html.twig" with {"iterator": loop.index0, "item": item} %}
+                                {% endfor %}
+                            </div>
+                            <p>
+                                <button class="btn btn-sm btn-success js-generator-item-new">Přidat položku</button>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div role="tabpanel" class="tab-pane fade" id="anothers">
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="checkbox">
+                                <label>
+                                    <input {% if module.inMenu %}checked{% endif %} type="checkbox" name="in_menu"
+                                           value="1">
+                                    Zobrazit v menu
+                                </label>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="form_edit_icon">Ikonka</label>
+                                <input value="{{ module.icon }}" name="icon" class="form-control" id="form_edit_icon">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-info">Uložit</button>
+    </form>
+
+{% endblock %}

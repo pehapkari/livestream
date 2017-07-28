@@ -1,0 +1,22 @@
+{
+  "role": {
+    "ROLE_ADMIN": ["ROLE_USER"],
+    "ROLE_USER": true
+  },
+  "provider": {
+    "Gephart\\Security\\Provider\\StaticProvider": {
+      "entity": "Gephart\\Security\\Entity\\User",
+      "algorithm": "bcrypt",
+      "cost": "10",
+      "salt": "testsalt"
+    }
+  },
+  "users": {
+    "admin@admin.admin": {
+      "password": "$2y$10$Yw7KgUSoSk2m3fIWBie1Xu4jXESX4T.wOq0NJp.nv1syPEEUrmA9i",
+      "roles": ["ROLE_ADMIN"]
+    }
+  },
+  "login": "admin_login",
+  "logout": "admin_logout"
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+    <title>Gephart - PHP framework</title>
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Source+Code+Pro:300,400,700,900|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900|Source+Serif+Pro:400,700" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Source Sans Pro", sans-serif;
+            color: #222;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: "Source Serif Pro", serif;
+        }
+        header {
+            background: #eee;
+            padding: 32px 0;
+        }
+        main {
+            padding: 32px;
+        }
+        p {
+            margin-bottom: 24px;
+        }
+        a {
+            color: #e79636;
+            text-decoration: none;
+            transition: color .2s;
+        }
+        a:hover {
+            color: #d78626;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img class="logo"
+         src="data:image/png;base64,{{ base64_encode(file_get_contents(_template_dir ~ "_framework/assets/img/logo-big.png")) }}">
+</header>
+<main>
+    <p>Now it's up to you!</p>
+    <p><a href="https://www.gephart.cz" target="_blank">www.gephart.cz</a></p>
+</main>
+</body>
+</html>

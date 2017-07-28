@@ -1,0 +1,20 @@
+{% spaceless %}
+<pre><code class="php">
+    {% set lines_num = {"from": errline-10, "to": errline+10} %}
+    {% set file_lines = file|split("\n") %}
+
+    {% for line_number, file_line in file_lines if line_number >= lines_num.from and line_number <= lines_num.to %}
+        {% set line_number = line_number + 1 %}
+
+        {% if line_number == errline %}
+            <div class='line-problem' style='background:rgba(212,0,0,.1)'>
+        {% endif %}
+
+        <span class='line-number'>{{ line_number }}.</span>{{ file_line }}<br/>
+
+        {% if line_number == errline %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</code></pre>
+{% endspaceless %}

@@ -1,0 +1,36 @@
+
+<div class="col-xs-3 js-generator-item">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <input {% if item %}value="{{ item.name }}"{% endif %}
+                        type="text" name="items[{{ iterator }}][name]" class="form-control" placeholder="Název">
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <input {% if item %}value="{{ item.slug }}"{% endif %}
+                       type="text" name="items[{{ iterator }}][slug]" class="form-control" placeholder="Slug">
+            </div>
+            <div class="form-group">
+                <select type="text" name="items[{{ iterator }}][type]" class="form-control">
+                    <option {% if item and item.type == "text" %}selected{% endif %}>text</option>
+                    <option {% if item and item.type == "textarea" %}selected{% endif %}>textarea</option>
+                    <option {% if item and item.type == "bool" %}selected{% endif %}>bool</option>
+                    <option {% if item and item.type == "date" %}selected{% endif %}>date</option>
+                    <option {% if item and item.type == "file" %}selected{% endif %}>file</option>
+                    <option {% if item and item.type == "image" %}selected{% endif %}>image</option>
+                    <optgroup label="Vazba">
+                        {% for relation_module in modules %}
+                            <option value="{{ relation_module.entityName }}"
+                                    {% if item and item.type == relation_module.entityName %}selected{% endif %}>
+                                {{ relation_module.name }}
+                            </option>
+                        {% endfor %}
+                    </optgroup>
+                </select>
+            </div>
+            <span class="btn btn-sm btn-danger js-generator-item-remove"><i class="glyphicon glyphicon-remove"></i></span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div class="_gf-line">
+    <img class="_gf-line__logo"
+         src="data:image/png;base64,{{ base64_encode(file_get_contents(_template_dir ~ "_framework/assets/img/logo.png")) }}">
+
+    {% for extension in extensions if extension.align == "left" %}
+        {% set content = extension.content %}
+        {% include "_framework/line_extension.html.twig" %}
+    {% endfor %}
+
+    <div style="float:right">
+        {% for extension in extensions if extension.align == "right" %}
+            {% set content = extension.content %}
+            {% include "_framework/line_extension.html.twig" %}
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    {% include "_framework/assets/css/main.css" %}
+</style>
