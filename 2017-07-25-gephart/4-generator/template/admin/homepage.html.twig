@@ -1,0 +1,22 @@
+{% extends "admin/default.html.twig" %}
+
+{% block content %}
+
+    <h1>Nástěnka</h1>
+
+    <div class="row">
+        {% for menu_key, menu_item in menu_list if menu_key != "homepage" %}
+            <div class="col-xs-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ menu_item.title }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a href="{{ menu_item.link }}">Přejít na modul</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "admin/generator/default.html.twig" %}
+
+{% block content %}
+
+    <h1>Generátor</h1>
+
+    <p>
+        <a href="{{ _router.generateUrl("admin_generator_new") }}" class="btn btn-success">Nový modul</a>
+    </p>
+
+    <div class="row noselect">
+        {% for module in modules %}
+            <div class="col-lg-4 col-md-6 js-generator-module" data-generator-module_id="{{ module.id }}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="pull-right">
+                            <span class="btn btn-xs btn-info js-generator-module-move"><small><i class="glyphicon glyphicon-move"></i></small></span>
+                        </div>
+                        <h3 class="panel-title">{{ module.name }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Entita:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].entity %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
+                                <td><button class="btn btn-xs btn-warning js-generator-entitysync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
+                            </tr>
+                            <tr>
+                                <th>Repozitář:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].repository %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
+                                <td><button class="btn btn-xs btn-warning js-generator-repositorysync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
+                            </tr>
+                            <tr>
+                                <th>Tabulka:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].table %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
+                                <td><button class="btn btn-xs btn-warning js-generator-tablesync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
+                            </tr>
+                            <tr>
+                                <th>Controller:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].controller %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
+                                <td><button class="btn btn-xs btn-warning js-generator-controllersync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
+                            </tr>
+                            <tr>
+                                <th>Šablony:</th>
+                                <td>
+                                    {% if modules_status[module.entityName].view %}
+                                        existuje
+                                    {% else %}
+                                        neexistuje
+                                    {% endif %}
+                                </td>
+                                <td><button class="btn btn-xs btn-warning js-generator-viewsync-show" data-toggle="modal" data-target="#generator-modal">Generovat</button></td>
+                            </tr>
+                        </table>
+                        <a href="{{ _router.generateUrl("admin_generator_edit", {"id": module.id}) }}" class="btn btn-info"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <a href="{{ _router.generateUrl("admin_generator_delete", {"id": module.id}) }}" class="btn btn-danger" onclick="return confirm('Opravdu chcete nenávratně smazat?')"><i class="glyphicon glyphicon-remove"></i></a>
+                        <span class="btn btn-warning js-generator-all-show" data-toggle="modal" data-target="#generator-modal">Generovat vše</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="generator-modal" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="generator-modal-label">Generování</h4>
+                </div>
+                <div class="modal-body" id="generator-modal-content">
+                    Načítání ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                    <!--<button type="button" class="btn btn-primary">Uložit</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/atom-one-light.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+
+
+{% endblock %}
+
+
+{% block javascripts %}
+
+    {{ parent() }}
+
+    <script src="assets/admin/js/drag-arrange.js"></script>
+    <script>
+        $('.js-generator-module').arrangeable({dragSelector: '.js-generator-module-move'});
+    </script>
+
+
+{% endblock %}

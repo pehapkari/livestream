@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <base href="{{ _base_uri }}"/>
+    <title>{% block title %}Admin{% endblock %}</title>
+
+    <link rel="stylesheet" href="assets/admin/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/admin/css/bootstrap-theme.css">
+    <script src="assets/admin/js/jquery-3.2.0.min.js"></script>
+    <script src="assets/admin/js/bootstrap.js"></script>
+</head>
+<body>
+<div id="wrap">
+
+    <div id="user">
+        <div class="dropdown">
+            <span class="dropdown-toggle" data-toggle="dropdown">
+                <img src="http://www.gravatar.com/avatar/{{ md5(user.username) }}?s=64&d=mm"/>
+                {{ user.username }}
+                <span class="caret"></span>
+            </span>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a href="{{ _router.generateUrl("admin_logout") }}"><i class="glyphicon glyphicon-off"></i> Odhlásit</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="menu">
+        <div class="container-fluid">
+            <div id="logo">
+                <a href="{{ _router.generateUrl("admin_homepage") }}">
+                    <img src="img/logo-invert.png" alt="Gephart"/>
+                </a>
+            </div>
+            <ul>
+                {% for menu_item in menu_list %}
+                    <li>
+                        <a href="{{ menu_item.link }}" {% if menu_item.active %}class="active"{% endif %}>
+                            {% if menu_item.icon %}
+                                <i class="glyphicon glyphicon-{{ menu_item.icon }}"></i>
+                            {% else %}
+                                <i class="glyphicon glyphicon-asterisk"></i>
+                            {% endif %}
+                            {{ menu_item.title }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="container-fluid">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    {% block javascripts %}{% endblock %}
+
+</div><!-- /#wrap -->
+</body>
+</html>

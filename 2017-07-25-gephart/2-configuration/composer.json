@@ -1,0 +1,13 @@
+{
+    "name": "michalkatuscak/2-configuration",
+    "authors": [
+        {
+            "name": "Michal Katuščák",
+            "email": "michal@katuscak.cz"
+        }
+    ],
+    "require": {
+        "gephart/configuration": "^0.2.0",
+        "gephart/dependency-injection": "^0.2.3"
+    }
+}

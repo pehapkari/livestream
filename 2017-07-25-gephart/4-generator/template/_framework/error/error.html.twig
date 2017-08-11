@@ -1,0 +1,14 @@
+{% extends "_framework/error/base.html.twig" %}
+
+{% block title %}
+    {{ type }}: {{ errstr }}
+{% endblock %}
+
+{% block header %}
+    <h1>{{ type }}: {{ errstr }}</h1>
+    <h2>{{ errfile }} at line <b>{{ errline }}</b></h2>
+{% endblock %}
+
+{% block main %}
+    {% include "_framework/error/blocks/file.html.twig" %}
+{% endblock %}

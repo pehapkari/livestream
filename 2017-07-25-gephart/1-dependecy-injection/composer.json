@@ -1,0 +1,12 @@
+{
+    "name": "michalkatuscak/1-dependecy-injection",
+    "authors": [
+        {
+            "name": "Michal Katuščák",
+            "email": "michal@katuscak.cz"
+        }
+    ],
+    "require": {
+        "gephart/dependency-injection": "^0.2.3"
+    }
+}
