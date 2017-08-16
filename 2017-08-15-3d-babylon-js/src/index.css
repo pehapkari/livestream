@@ -1,0 +1,13 @@
+#scene{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+#score{
+  position: fixed;
+  top: 0;
+  right: 0;
+  font-size: 2em;
+}
