@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  nginx:
+    env_file:
+      - .env
+      - .env.development
+    environment:
+      - VIRTUAL_HOST=application.development.loc
+    volumes:
+      - .:/var/www
+
+  php-fpm:
+    env_file:
+      - .env
+      - .env.development
+    volumes:
+      - .:/var/www
+
+  db:
+    volumes:
+      - /var/lib/mysql

@@ -1,0 +1,45 @@
+version: '3'
+
+volumes:
+  application-database:
+    external: true
+  application:
+
+networks:
+  application:
+    external: true
+  public:
+    external: true
+
+services:
+    nginx:
+        build: ./docker/nginx
+        volumes:
+          - application:/var/www:ro
+        links:
+          - php-fpm
+        networks:
+          - application
+          - public
+
+    php-fpm:
+        build:
+          context: .
+          dockerfile: ./docker/php-fpm/Dockerfile
+        env_file:
+          - .env
+        volumes:
+          - application:/var/www
+        links:
+          - db
+        networks:
+          - application
+
+    db:
+        image: mysql:5.7
+        env_file:
+          - .env
+        volumes:
+          - application-database:/var/lib/mysql
+        networks:
+          - application

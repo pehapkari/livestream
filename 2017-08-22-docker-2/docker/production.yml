@@ -1,0 +1,21 @@
+version: '3'
+
+
+services:
+  nginx:
+    restart: always
+    env_file:
+      - .env
+      - .env.production
+    environment:
+      - VIRTUAL_HOST=application.production.loc
+
+  php-fpm:
+    image: localhost:5000/development_php-fpm
+    restart: always
+    env_file:
+      - .env
+      - .env.production
+
+  db:
+    restart: always
