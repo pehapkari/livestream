@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+if [[ ${@:1:1} = "composer" ]]; then
+    docker run --rm \
+      -u $(id -u):$(id -g) \
+      -v $(pwd):/app \
+      -v ~/.composer:/composer \
+      -v /etc/passwd:/etc/passwd \
+      -v ~/.ssh:$HOME/.ssh \
+      -v ~/.composer:$HOME/.composer \
+      composer ${@:2} --no-ansi --no-interaction --no-progress --optimize-autoloader --ignore-platform-reqs --no-scripts
+elif [[ ${@:1:1} = "npm" ]]; then
+    docker run --rm \
+      -v $PWD:/app \
+      -v ~/.npm:/.npm \
+      -u $(id -u):$(id -g) \
+      -w /app \
+      node npm ${@:2}
+    exit
+elif [[ ${@:1:1} = "phpstan" ]]; then
+    docker run --rm \
+      -v $PWD:/app \
+      -u $(id -u):$(id -g) \
+      -w /app \
+      phpstan/phpstan analyse -c phpstan.neon -l 5 app tests
+    exit
+elif [[ ${@:1:1} = "phpcbf" ]]; then
+    docker run --rm \
+      -v $PWD:/app \
+      -u $(id -u):$(id -g) \
+      -w /app \
+      texthtml/phpcs phpcbf --standard=PSR2 app tests
+    exit
+elif [[ ${@:1:1} = "php-cs-fixer" ]]; then
+    docker run --rm \
+      -v $PWD:/app \
+      -u $(id -u):$(id -g) \
+      ypereirareis/php-cs-fixer fix --config-file=.php_cs app ${@:2}
+    exit
+elif [[ ${@:1:1} = "development" ]]; then
+    docker-compose -p development -f docker-compose.yml -f ./docker/development.yml ${@:2}
+    exit
+elif [[ ${@:1:1} = "testing" ]]; then
+    docker-compose -p testing -f docker-compose.yml -f ./docker/testing.yml ${@:2}
+    exit
+elif [[ ${@:1:1} = "production" ]]; then
+    docker-compose -p production -f docker-compose.yml -f ./docker/production.yml ${@:2}
+    exit
+fi

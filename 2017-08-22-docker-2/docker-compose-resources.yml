@@ -1,0 +1,33 @@
+version: '2.2'
+
+services:
+    nginx:
+        build: ./docker/nginx
+        volumes:
+          - .:/app
+        links:
+          - php-fpm
+
+    php-fpm:
+        cpu_count: 1
+        cpu_percent: 30
+        mem_limit: 512m
+        build:
+          context: .
+          dockerfile: ./docker/php-fpm/Dockerfile
+        env_file:
+          - .env
+        volumes:
+          - .:/app
+        links:
+          - db
+
+    db:
+        cpu_count: 1
+        cpu_percent: 50
+        mem_limit: 1024m
+        image: mysql:5.7
+        env_file:
+          - .env
+        volumes:
+          - /var/lib/mysql
