@@ -1,0 +1,10 @@
+{block content}
+
+{control searchForm}
+{if $article !== null}
+	Found article: <br/>
+	title: {$article->getTitle()}<br/>
+	text: {$article->getText()}<br/>
+{else}
+	For your search, no articles were found.
+{/if}

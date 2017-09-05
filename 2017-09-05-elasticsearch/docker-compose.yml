@@ -1,7 +1,7 @@
 version: '2'
 services:
     elasticsearch:
-        image: khezen/elasticsearch:5
+        image: azathoth/elasticsearch
         environment:
             ELASTIC_PWD: changeme
             KIBANA_PWD: changeme

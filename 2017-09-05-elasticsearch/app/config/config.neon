@@ -25,6 +25,8 @@ services:
 		factory: App\Model\ElasticSearchClientFactory::create
 		class: Elasticsearch\Client
 	- App\Model\MoviesIndexer
+	- App\Model\ArticleManager
+	- App\Forms\FormFactory
 #	- App\Model\MoviesElasticSearchRepository
 
 extensions:
