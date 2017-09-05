@@ -1,0 +1,100 @@
+{block content}
+	<div class="col-md-9">
+		<h1 class="pull-left">
+			{if $userFilters}
+				-
+				{foreach $userFilters as $filterKey => $value}
+					{$value}{if $filterKey == 'price'} Kč{/if}{sep}, {/sep}
+				{/foreach}
+			{/if}
+
+		</h1>
+	</div>
+
+	<div class="col-md-9">
+		<h5><span>Celkem filmů: {$movies['total']}</span></h5>
+	</div>
+
+	<div class="col-md-9">
+		<div class="row">
+			<table class="table table-sm table-inverse">
+				<thead>
+				<tr>
+					<th>#</th>
+					<th>Title</th>
+					<th>Duration</th>
+					<th>Color</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr n:foreach="$movies['movies'] as $i => $movie">
+					<th scope="row">{$i}</th>
+					<td>{$movie['movieTitle']}</td>
+					<td>{$movie['duration']}</td>
+					<td>{$movie['color']}</td>
+				</tr>
+				</tbody>
+			</table>
+
+			{if $paginator->pageCount > 1}
+				<nav>
+					<ul class="pagination pagination-sm">
+						<li{if $paginator->first} class="disabled"{/if}>
+							{var $userFilters['page'] => $paginator->page-1}
+							<a href="{link this (expand) $userFilters}" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						{if $paginator->pageCount > ($page + 5) || ($page - 5) > 1}
+							{if $page - 5 > $i}
+								{var $i = 1}
+								<li{if $paginator->page == $i} class="active"{/if}>
+									{var $userFilters['page'] => $i}
+									<a href="{link this (expand) $userFilters}">{$i} {if $paginator->page == $i}<span
+												class="sr-only">(current)</span>{/if}
+									</a>
+								</li>
+							{/if}
+							{for $i = max(1, $page - 5); $i <= min($paginator->pageCount, $page + 5); $i++}
+								<li{if $paginator->page == $i} class="active"{/if}>
+									{var $userFilters['page'] => $i}
+									<a href="{link this (expand) $userFilters}">{$i} {if $paginator->page == $i}<span
+												class="sr-only">(current)</span>{/if}
+									</a>
+								</li>
+							{/for}
+							{if $page + 5 < $paginator->pageCount}
+								{var $i = $paginator->pageCount}
+								<li{if $paginator->page == $i} class="active"{/if}>
+									{var $userFilters['page'] => $i}
+									<a href="{link this (expand) $userFilters}">{$i} {if $paginator->page == $i}<span
+												class="sr-only">(current)</span>{/if}
+									</a>
+								</li>
+							{/if}
+						{else}
+							{for $i = 1; $i <= $paginator->pageCount; $i++}
+								<li{if $paginator->page == $i} class="active"{/if}>
+									{var $userFilters['page'] => $i}
+									<a href="{link this (expand) $userFilters}">{$i} {if $paginator->page == $i}<span
+												class="sr-only">(current)</span>{/if}
+									</a>
+								</li>
+							{/for}
+						{/if}
+
+						<li{if $paginator->last} class="disabled"{/if}>
+							{var $userFilters['page'] => $paginator->page+1}
+							<a href="{link this (expand) $userFilters}" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			{/if}
+
+		</div>
+	</div>
+
+
+{/block}

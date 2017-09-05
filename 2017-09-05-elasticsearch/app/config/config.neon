@@ -1,0 +1,34 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+parameters:
+
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+
+doctrine:
+	metadata:
+		App: %appDir%
+
+services:
+	router: App\RouterFactory::createRouter
+	- App\Model\MoviesRepository
+	-
+		factory: App\Model\ElasticSearchClientFactory::create
+		class: Elasticsearch\Client
+	- App\Model\MoviesIndexer
+#	- App\Model\MoviesElasticSearchRepository
+
+extensions:
+	console: Kdyby\Console\DI\ConsoleExtension
+	events: Kdyby\Events\DI\EventsExtension
+	annotations: Kdyby\Annotations\DI\AnnotationsExtension
+	doctrine: Kdyby\Doctrine\DI\OrmExtension

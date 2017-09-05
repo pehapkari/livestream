@@ -1,0 +1,25 @@
+version: '2'
+services:
+    elasticsearch:
+        image: khezen/elasticsearch:5
+        environment:
+            ELASTIC_PWD: changeme
+            KIBANA_PWD: changeme
+            HTTP_SSL: 'false'
+        volumes:
+            - ./data/elasticsearch:/usr/share/elasticsearch/data
+            - ./etc/elasticsearch:/usr/share/elasticsearch/config
+        ports:
+             - "9200:9200"
+             - "9300:9300"
+        networks:
+            - app_net
+    cerebro:
+        image: yannart/cerebro
+        ports:
+            - "9001:9000"
+        networks:
+            - app_net
+networks:
+    app_net:
+        driver: bridge

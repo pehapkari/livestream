@@ -1,0 +1,37 @@
+{
+	"name": "elastic-stream/application",
+	"description": "The sample application for using the elasticsearch.",
+	"type": "project",
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"require": {
+		"php": ">=5.6.0",
+		"nette/application": "^2.4.4",
+		"nette/bootstrap": "^2.4.3",
+		"nette/caching": "^2.5",
+		"nette/database": "^2.4",
+		"nette/di": "^2.4",
+		"nette/finder": "^2.4",
+		"nette/forms": "^2.4",
+		"nette/http": "^2.4",
+		"nette/mail": "^2.4",
+		"nette/robot-loader": "^2.4",
+		"nette/safe-stream": "^2.3",
+		"nette/security": "^2.4",
+		"nette/utils": "^2.4",
+		"latte/latte": "^2.4",
+		"tracy/tracy": "^2.4",
+		"dg/adminer-custom": "^1.9",
+		"kdyby/doctrine": "^3.2",
+		"league/csv": "^9.0",
+		"elasticsearch/elasticsearch": "^5.3"
+	},
+	"require-dev": {
+		"nette/tester": "^2.0"
+	},
+	"minimum-stability": "stable",
+	"config": {
+		"platform": {
+			"php": "7.1"
+		}
+	}
+}
