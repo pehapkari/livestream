@@ -27,8 +27,8 @@ class MoviesElasticSearchRepository implements IMoviesRepository
 	public function findBy(array $filters = [])
 	{
 		$query = [
-			'index' => 'eshop',
-			'type' => 'product',
+			'index' => 'elasticsearch_php',
+			'type' => 'movies',
 			'body' => [
 				'query' => [
 					'filtered' => [
@@ -39,10 +39,10 @@ class MoviesElasticSearchRepository implements IMoviesRepository
 					]
 				],
 				"aggs" => [
-					"price" => [
-						"histogram" => [
+					"duration" => [
+						"duration" => [
 							"field" => "price",
-							"interval" => 5000
+							"interval" => 10
 						]
 					],
 					"brand" => [
