@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to Vue</title>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="app">
+      <my-component></my-component>
+    </ul>
+  </div>
+
+  <script>
+    const childComponent = {
+      name: 'child-component',
+
+      template: `
+        <div class="my-component">
+          <p>{{ myProp }}</p>
+          <button @click="incrementCounter">Icrement +1</button>
+          {{ counter }}
+          <h2>{{ computedProp }}</h2>
+        </div>
+      `,
+
+      props: {
+        myProp: {
+          tyope: String,
+          required: true
+        }
+      },
+
+      data: () => ({
+        counter: 100
+      }),
+
+      computed: {
+        computedProp() {
+          return `${this.myProp} is not a good word`
+        }
+      },
+
+      mounted() {
+        console.log(this.myProp)
+      },
+
+      methods: {
+        incrementCounter() {
+          this.counter++
+        },
+
+        sayHello() {
+          this.$emit('sayHello', 'Hello!')
+        }
+      }
+    }
+
+
+    const myComponent = {
+      name: 'my-component',
+
+      components: {
+        childComponent
+      },
+
+      template: `
+        <div class="my-component">
+          <button @click="toggleVisible">Toggle</button>
+          <transition name="fade">
+            <h1 v-show="isVisible">lorem ipsum</h1>
+          </transition>
+          <ul>
+            <li v-for="item in items"> {{ item }} </li>
+          </ul>
+          <slot name="slot-1">
+            <child-component my-prop="test"></child-component>
+          </slot>
+        </div>
+      `,
+
+      data: () => ({
+        counter: 100,
+        isVisible: true,
+        items: [
+          'test1',
+          'test2',
+          'test3'
+        ]
+      }),
+
+      created() {
+
+      },
+
+      mounted() {
+        
+      },
+
+      methods: {
+        toggleVisible() {
+          this.isVisible = !this.isVisible
+        }
+      }
+    }
+
+    window.app = new Vue({
+      el: '#app',
+
+      components: {
+        myComponent
+      }
+    })
+  </script>
+</body>
+</html>
