@@ -1,0 +1,17 @@
+-- Start docker
+docker run -d -p 15673:15672 -p 5673:5672 --hostname rabbitmqjb --name rabbitjb rabbitmq:3.6-management-alpine
+
+-- Management console
+http://localhost:15673/#/
+
+-- App connection
+localhost, 5673
+
+-- Restart Rabbita
+docker restart rabbitjb
+
+
+-- Time measure
+$start = microtime(true);
+$end = microtime(true) - $start;
+
