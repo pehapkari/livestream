@@ -11,7 +11,7 @@ $exchange = 'supplier.topic';
 $channel->exchange_declare($exchange, 'topic', false, false, false);
 
 $i = 0;
-while ($i < 1000) {
+while ($i < 10000) {
 	$id = uniqid('supplierData');
 	$msgProperties = [
 		'content_type' => 'text/plain',
