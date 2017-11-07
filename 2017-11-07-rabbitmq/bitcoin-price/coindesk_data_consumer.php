@@ -7,6 +7,8 @@ ini_set('display_errors', true);
 $callback = function (\PhpAmqpLib\Message\AMQPMessage $msg) {
 	echo $msg->getBody() . PHP_EOL;
 	$msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+	// This calls register_shutdown_function.
+//	$msg->delivery_info['channel']->basic_cancel($msg->delivery_info['delivery_tag']);
 };
 
 $exchange = 'bitcoin.price';

@@ -23,6 +23,7 @@ $channel->queue_bind($queueName . '5', $exchange, 'product.#');
 $callback = function (\PhpAmqpLib\Message\AMQPMessage $msg) {
 	echo $msg->getBody() . PHP_EOL;
 	$msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+//	$msg->delivery_info['channel']->basic_reject($msg->delivery_info['delivery_tag']);
 };
 
 $channel->basic_consume($queueName . '5', 'supplierData' . getmypid(), false, false, false, false, $callback);

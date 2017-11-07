@@ -21,7 +21,7 @@ $channel = $connection->channel();
 
 $queueArguments = new AMQPTable([
 //	'x-dead-letter-exchange' => 't_test1',
-//	'x-message-ttl' => 15000
+//	'x-message-ttl' => 15000 // 15s
 ]);
 
 //$channel->exchange_declare($exchange, 'direct', false, false, true);

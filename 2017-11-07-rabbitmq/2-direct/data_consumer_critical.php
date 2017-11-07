@@ -18,19 +18,6 @@ $channel->queue_declare($queue, false, false, false, false);
 $channel->queue_bind($queue, $exchange, 'critical');
 $channel->basic_consume($queue, 'directInfoConsumer1_' . getmypid(), false, false, false, false, $callback);
 
-/**
- * @param \PhpAmqpLib\Channel\AbstractChannel $channel
- * @param \PhpAmqpLib\Connection\AbstractConnection $connection
- */
-//function shutdown(\PhpAmqpLib\Channel\AMQPChannel $channel, \PhpAmqpLib\Connection\AbstractConnection $connection)
-//{
-//	$channel->close();
-//	$connection->close();
-//	echo 'Closing consuming messages' . PHP_EOL;
-//}
-//
-//register_shutdown_function('shutdown', $channel, $connection);
-
 // Loop as long as the channel has callbacks registered
 while (count($channel->callbacks)) {
 	$channel->wait();
